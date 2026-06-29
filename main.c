@@ -34,13 +34,13 @@ int main(void) {
 
 
   InitWindow(screenWidth, screenHeight, "bello");
-  SetTargetFPS(60);
+  SetTargetFPS(20);
 
   while(!WindowShouldClose()) {
 
 
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
 
     DrawText("mooooooo", 190, 200, 20, LIGHTGRAY );
 
