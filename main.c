@@ -42,7 +42,7 @@ int main(void) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    DrawText("niggamooooooo", 190, 200, 20, LIGHTGRAY );
+    DrawText("mooooooo", 190, 200, 20, LIGHTGRAY );
 
     EndDrawing();
   }

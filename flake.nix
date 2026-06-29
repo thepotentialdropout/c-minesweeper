@@ -17,7 +17,7 @@
         gdb
       ];
       shellHook = ''
-        echo "hello nigga"
+        echo "hello "
         '';
 
     };
