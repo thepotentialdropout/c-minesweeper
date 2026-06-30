@@ -2,6 +2,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <raylib.h>
+#include <time.h>
+#include <math.h>
+
 
 typedef int8_t i8;
 typedef int16_t i16;
@@ -18,15 +21,44 @@ typedef i32 b32;
 typedef float f32;
 typedef double f64;
 
+#define BLOCK_SIZE 42
+#define BOARD_SIZE 8 
+
 typedef struct {
-  f32 x;
-  f32 y;
-} vec2f;
+  i32 x;
+  i32 y;
+} mine;
 
 typedef struct {
   u32* nums;
   u32 size;
-} num_array;
+} mine_array;
+
+i32 mineboard[BOARD_SIZE+2][BOARD_SIZE+2];
+i32 nums[BOARD_SIZE+2][BOARD_SIZE+2];
+mine* mines;
+i32 x, y;
+
+void populate(i32 p, i32 q) {
+  nums[p-1][q-1] += 1;
+  nums[p-1][q] += 1;
+  nums[p-1][q+1] += 1;
+  nums[p][q-1] += 1;
+  nums[p][q+1] += 1;
+  nums[p+1][q-1] += 1;
+  nums[p+1][q] += 1;
+  nums[p+1][q+1] += 1;
+
+}
+void mines(){
+  for (i32 i = 0; i< 12; i++){
+     mines[i]->x = (rand() % BOARD_SIZE)+1;
+     y = (rand() % BOARD_SIZE)+1;
+     mineboard[x][y] = -1;
+     populate(x,y);
+  }
+}
+
 
 int main(void) {
   const i32 screenWidth = 800;
