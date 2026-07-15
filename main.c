@@ -27,6 +27,9 @@ typedef double f64;
 #define BOARD_SIZE 8 
 #define NUM_MINES 12
 
+Vector2 mouse = { -1, -1};
+Vector2 selectedTile = {-1, -1};
+
 typedef struct {
   i32 x;
   i32 y;
@@ -38,7 +41,7 @@ typedef struct {
 } mine_array;
 
 i32 nums[BOARD_SIZE+2][BOARD_SIZE+2];
-i32 cells[BOARD_SIZE+2][BOARD_SIZE+2];
+char cells[BOARD_SIZE+2][BOARD_SIZE+2];
 
 void populate(i32 p, i32 q ) {
   nums[p-1][q-1] += 1;
@@ -62,29 +65,28 @@ mine* initBoard(mine* mines){
 
 mine* addMines(mine* mines) {
   for ( i32 i = 0; i < NUM_MINES; i++) {
-       nums[mines[i].x][mines[i].y] = -1;
+       nums[mines[i].x][mines[i].y] = 9;
   }
   return mines;
 }
 
 void clearBoard() {
   memset(nums, 0, sizeof(nums));
-  memset(cells, 0, sizeof(nums));
+  memset(cells, '%', sizeof(cells));
 }
 
-// b32 open(i32 x, i32 y){
-//   cells[x][y] = nums[x][y];
-//   //print cells
-//   return (nums[x][y]==-1)? 0 : 1;
-// }
-
-void flag(i8 x, i8 y){
-  cells[x][y] = -2;
-  //print cells
+void openTile(i32 x, i32 y){
+   char b[2];
+   sprintf(b, "%d",nums[x+1][y+1]);
+   // cells[x+1][y+1] = (char)nums[x+1][y+1];
+   cells[x+1][y+1] = b[0];
 }
+
 
 int main(void) {
 
+
+  clearBoard();
   u32 numMines = NUM_MINES;
   mine* mines = (mine*)malloc(sizeof(mine) * numMines);
   srand(time(NULL));
@@ -108,6 +110,16 @@ int main(void) {
 
   while(!WindowShouldClose()) {
 
+    mouse = GetMousePosition();
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+      i8 x = mouse.x / CELL_SIZE;
+      i8 y = mouse.y / CELL_SIZE;
+      if ( x >= 0 && x <= BOARD_SIZE && y >= 0 && y <= BOARD_SIZE ) {
+        selectedTile = (Vector2){ x, y };
+      }
+    }
+        
+
 
     BeginDrawing();
     ClearBackground(BLACK);
@@ -124,12 +136,21 @@ int main(void) {
 
         DrawTextEx(
           GetFontDefault(),
-          TextFormat("%d", cells[x+1][y+1]),
+          TextFormat("%c", cells[x+1][y+1]),
           (Vector2) { rect.x +12, rect.y+8},
           20, 1, WHITE
         );
           
       }
+    }
+
+    if (selectedTile.x >= 0) {
+      DrawRectangleLinesEx((Rectangle) {
+        selectedTile.x * CELL_SIZE,
+        selectedTile.y * CELL_SIZE,
+        CELL_SIZE, CELL_SIZE
+        }, 2, GREEN);
+        openTile(selectedTile.x, selectedTile.y);
     }
 
 
@@ -138,7 +159,5 @@ int main(void) {
   }
 
   CloseWindow();
-
-  return 0;
-
+return 0;
 }
